@@ -17,8 +17,8 @@ public class Logger extends Aspect {
         super(key, timeUnit);
     }
 
-    public void reset() {
-        super.reset();
+    public void resetValues() {
+        super.resetValues();
 
         this.values = new ConcurrentLinkedQueue<String>();
     }

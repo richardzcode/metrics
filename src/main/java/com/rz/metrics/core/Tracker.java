@@ -12,6 +12,13 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Author: richardz
  * Date: 6/6/12 Time: 11:43 AM
+ *
+ * Usage:
+ * Tracker.count("traffic:url1");
+ * Tracker.incr("onlineUser"); // When login
+ * Tracker.decr("onlineUser"); // When logout or expire.
+ * Tracker.gauge("latency:url1", nnn);
+ * Tracker.log("maliciousRequest:url1", "IP xxx.xxx.xxx.xxx");
  */
 public class Tracker {
     private static long timeUnit = 60000L; // in milliseconds, default 60 seconds.
@@ -48,8 +55,25 @@ public class Tracker {
         getInstance().doAddListener(listener);
     }
 
+    /**
+     * Counter created by calling count is set to non-accumulative by default.
+     */
     public static void count(String key) {
         getInstance().doCount(key);
+    }
+
+    /**
+     * Counter created by calling incr/decr is set to accumulative by default.
+     */
+    public static void incr(String key) {
+        getInstance().doIncr(key);
+    }
+
+    /**
+     * Counter created by calling incr/decr is set to accumulative by default.
+     */
+    public static void decr(String key) {
+        getInstance().doDecr(key);
     }
 
     public static void gauge(String key, long val) {
@@ -69,21 +93,27 @@ public class Tracker {
     }
 
     public void doCount(String key) {
-        if (this.listeners.isEmpty()) {
-            return;
-        }
-
         Counter counter = this.getAspect(Counter.class, this.counters, key);
         if (counter != null) {
-            counter.count();
+            counter.count(1);
+        }
+    }
+
+    public void doIncr(String key) {
+        Counter counter = this.getAspect(Counter.class, this.counters, key, true);
+        if (counter != null) {
+            counter.count(1);
+        }
+    }
+
+    public void doDecr(String key) {
+        Counter counter = this.getAspect(Counter.class, this.counters, key, true);
+        if (counter != null) {
+            counter.count(-1);
         }
     }
 
     public void doGauge(String key, long val) {
-        if (this.listeners.isEmpty()) {
-            return;
-        }
-
         Gauger gauger = this.getAspect(Gauger.class, this.gaugers, key);
         if (gauger != null) {
             gauger.gauge(val);
@@ -91,10 +121,6 @@ public class Tracker {
     }
 
     public void doLog(String key, String val) {
-        if (this.listeners.isEmpty()) {
-            return;
-        }
-
         Logger logger = this.getAspect(Logger.class, this.loggers, key);
         if (logger != null) {
             logger.log(val);
@@ -102,6 +128,17 @@ public class Tracker {
     }
 
     private <T extends Aspect> T getAspect(Class<T> klass, ConcurrentHashMap<String, T> collection, String key) {
+        return this.getAspect(klass, collection, key, false);
+    }
+
+    private <T extends Aspect> T getAspect(Class<T> klass
+            , ConcurrentHashMap<String, T> collection
+            , String key
+            , boolean isAccumulative) {
+        if (this.listeners.isEmpty()) {
+            return null;
+        }
+
         T t = collection.get(key);
         if (t != null) {
             return t;
@@ -113,6 +150,8 @@ public class Tracker {
             t = klass.getDeclaredConstructor(String.class, long.class).newInstance(key, timeUnit);
             if (!collection.contains(key)) {
                 collection.put(key, t);
+
+                t.setAccumulative(isAccumulative);
                 t.addListeners(this.listeners);
             } else {
                 t = collection.get(key);

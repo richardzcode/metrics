@@ -8,24 +8,24 @@ import com.rz.metrics.core.entities.CounterEntity;
  * Date: 6/6/12 Time: 12:19 PM
  */
 public class Counter extends Aspect{
-    private volatile int count;
+    private volatile long count;
 
     // Stack data
-    private int _count;
+    private long _count;
 
     public Counter(String key, long timeUnit) {
         super(key, timeUnit);
     }
 
-    public void reset() {
-        super.reset();
+    public void resetValues() {
+        super.resetValues();
 
         this.count = 0;
     }
 
-    public void count() {
+    public void count(int num) {
         this.checkBound();
-        this.count ++;
+        this.count += num;
     }
 
     public void stackData() {

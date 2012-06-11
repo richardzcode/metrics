@@ -19,6 +19,11 @@ public class App {
         Tracker.addListener(new ConsoleListener());
         for (int i = 0; i < 5000; i ++) {
             Tracker.count("counter1");
+            if (random.nextInt(5) == 1) {
+                Tracker.decr("counter2");
+            } else {
+                Tracker.incr("counter2");
+            }
             Tracker.gauge("gauger1", (long) random.nextInt(1000));
             if (i % 100 == 0) {
                 Tracker.log("logger1", String.format("i == %d", i));

@@ -10,13 +10,13 @@ import org.codehaus.jackson.node.ObjectNode;
 public class CounterEntity extends BaseEntity{
     public static String JSON_KEY_COUNT     = "count";
 
-    private int count;
+    private long count;
 
     public CounterEntity(long ts, long timeUnit) {
         super(ASPECT_NAME_COUNTER, ts, timeUnit);
     }
 
-    public void setCount(int count) {
+    public void setCount(long count) {
         this.count = count;
     }
 

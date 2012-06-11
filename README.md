@@ -14,6 +14,8 @@ Start point. Singleton class.
 
 ###Aspects
 
+If aspect is set to accumulative then values do not reset on each time unit. Default is non-accumulative.
+
 ####Counter
 Counts number of invocations in one time unit.
 
@@ -46,14 +48,18 @@ Writes data to console.
 
 ###Tracking
 ####Count
-    Tracker.count("CounterKey1");
+    Tracker.count("traffic:url1");
+
+If first time calling a counter, which creates the counter, is by incr/decr then the counter is set to accumulative automatically.
+    Tracker.incr("onlineUser"); // Login
+    Tracker.decr("onlineUser"); // Logout or expire
 
 ####Gauge
-    long latency;
-    Tracker.gauge("Request:URI1", latency);
+    long latency = nnn;
+    Tracker.gauge("latency:url1", latency);
 
 ####Log
-    Tracker.log("LoggerKey1", "malicious IP xxx.xxx.xxx.xxx");
+    Tracker.log("malicious", "IP xxx.xxx.xxx.xxx");
 
 ###Listening
     public void onTimeUnit(String data) {

@@ -17,8 +17,8 @@ public class Gauger extends Aspect {
         super(key, timeUnit);
     }
 
-    public void reset() {
-        super.reset();
+    public void resetValues() {
+        super.resetValues();
 
         this.values = new PriorityBlockingQueue<Long>(1000);
     }

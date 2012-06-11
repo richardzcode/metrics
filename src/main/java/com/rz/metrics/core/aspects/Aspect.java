@@ -15,6 +15,9 @@ public abstract class Aspect {
     private String key;
     private long timeUnit;
 
+    // This aspect tracker is accumulative means numbers wouldn't be reset after each time unit.
+    private boolean isAccumulative;
+
     private long start;
     private long end_bound;
 
@@ -41,6 +44,14 @@ public abstract class Aspect {
         return this.timeUnit;
     }
 
+    public boolean IsAccumulative() {
+        return this.isAccumulative;
+    }
+
+    public void setAccumulative(boolean accum) {
+        this.isAccumulative = accum;
+    }
+
     public long getStackedTs() {
         return this._ts;
     }
@@ -50,6 +61,14 @@ public abstract class Aspect {
 
         long end = this.start + this.timeUnit;
         this.end_bound = end - end % this.timeUnit;
+
+        if (!this.isAccumulative) {
+            resetValues();
+        }
+    }
+
+    public void resetValues() {
+        //
     }
 
     public boolean isOverBound(long ts) {
@@ -104,7 +123,7 @@ public abstract class Aspect {
             JsonNode data = this.entity.toJson();
 
             for (IListener listener : this.listeners) {
-                listener.onTimeUnit(data);
+                listener.onTimeUnit(data.toString());
             }
         }
     }
