@@ -10,7 +10,7 @@ import com.rz.metrics.core.entities.CounterEntity;
 public class Counter extends Aspect{
     private volatile long count;
 
-    // Stack data
+    // Stacked data
     private long _count;
 
     public Counter(String key, long timeUnit) {

@@ -11,6 +11,8 @@ import java.util.concurrent.PriorityBlockingQueue;
  */
 public class Gauger extends Aspect {
     private PriorityBlockingQueue<Long> values;
+
+    // Stacked data
     private PriorityBlockingQueue<Long> _values;
 
     public Gauger(String key, long timeUnit) {

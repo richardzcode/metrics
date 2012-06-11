@@ -21,11 +21,12 @@ public abstract class Aspect {
     private long start;
     private long end_bound;
 
-    // Stack data
+    // Stacked data
     private long _ts;
 
     private ArrayList<IListener> listeners;
 
+    // Provide a helper lock to make sure onTimeUnit thread-safe.
     private Object lockOnTimeUnit = new Object();
 
     public Aspect(String key, long timeUnit) {
@@ -71,10 +72,21 @@ public abstract class Aspect {
         //
     }
 
+    /**
+     * To check if current tracking started more than one timeUnit ago.
+     * If so, a onTimeUnit should be emitted.
+     *
+     * @param ts The timestamp
+     */
     public boolean isOverBound(long ts) {
         return ts > this.end_bound;
     }
 
+    /**
+     * Make sure previous tracked data are purged.
+     *
+     * Sub-classes should call CheckBound before any data tracking.
+     */
     public void checkBound() {
         long ts = (new Date()).getTime();
         if (this.isOverBound(ts)) {
@@ -107,6 +119,13 @@ public abstract class Aspect {
         this._ts = this.end_bound - this.timeUnit;
     }
 
+    /**
+     * Get the stacked data for emitting onTimeUnit event.
+     *
+     * Sub-class should override this method.
+     *
+     * @return Stacked data entity object.
+     */
     public BaseEntity getStackedData() {
         return null;
     }

@@ -11,6 +11,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class Logger extends Aspect {
     private ConcurrentLinkedQueue<String> values;
+
+    // Stacked data
     private ConcurrentLinkedQueue<String> _values;
 
     public Logger(String key, long timeUnit) {
