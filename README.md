@@ -3,27 +3,33 @@ metrics
 
 Capture Java application metrics
 
-Inspired by [Metrics](http://metrics.codahale.com/) written by Coda Hale. But wanted to write a very light one just enough for my projects.
+Inspired by [Metrics](http://metrics.codahale.com/) written by Coda Hale. But don't want to get too complicated. So write a very light one just enough for basic usages.
 
-Try to make data collection as fast as possible. When time unit reached it'll start another thread to emit event.
+Minimum overhead on data collecting. Use thread to emit event when time unit reached.
+
+Depend on listener implementation, data can be send to database, in-memory, another service, or wherever useful.
 
 ##Classes
 
 ###Tracker
-Start point. Singleton class.
+Start point. Singleton class. Default time unit is 1 minute.
 
-###Aspects
+###Aspect
+
+Base class
 
 If aspect is set to accumulative then values do not reset on each time unit. Default is non-accumulative.
 
 ######Counter
-Counts number of invocations in one time unit.
+Counts number per time unit.
+
+Incr/Decr are used to keep counts over time. If the counter is used with incr/decr then number doesn't reset on time unit.
 
 ######Gauger
-Collect dataset in one time unit and calculates count/total/main/mean/90 percentile/95 percentile/99 percentile/max
+Collect dataset per time unit and calculates count/total/main/mean/90 percentile/95 percentile/99 percentile/max
 
 ######Logger
-Keep special logs in one time unit.
+Keep special logs per one time unit.
 
 ###Listener
 Implements IListener interface. The method onTimeUnit will be triggered on every time unit with collected data in JSON string.
@@ -35,7 +41,7 @@ Application should implement IListener and add to Tracker to deal with data.
     }
 
 ######ConsoleListener
-Writes data to console.
+An example of listener. Writes data to console.
 
 ##Usage
 
@@ -63,6 +69,16 @@ If first time calling a counter, which creates the counter, is by incr/decr then
     Tracker.log("malicious", "IP xxx.xxx.xxx.xxx");
 
 ###Listening
+    /**
+     * @param data
+     *         {
+     *             aspect: "counter"|"gauger"|"logger"
+     *             , key: "..."
+     *             , ts: "nnn" // Timestamp
+     *             , timeUnit: "60000"
+     *             , data: {...}
+     *         }
+     */
     public void onTimeUnit(String data) {
         // Do whatever.
     }
