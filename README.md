@@ -16,13 +16,13 @@ Start point. Singleton class.
 
 If aspect is set to accumulative then values do not reset on each time unit. Default is non-accumulative.
 
-####Counter
+######Counter
 Counts number of invocations in one time unit.
 
-####Gauger
+######Gauger
 Collect dataset in one time unit and calculates count/total/main/mean/90 percentile/95 percentile/99 percentile/max
 
-####Logger
+######Logger
 Keep special logs in one time unit.
 
 ###Listener
@@ -34,7 +34,7 @@ Application should implement IListener and add to Tracker to deal with data.
         public void onTimeUnit(String data);
     }
 
-####ConsoleListener
+######ConsoleListener
 Writes data to console.
 
 ##Usage
@@ -47,7 +47,7 @@ Writes data to console.
     Tracker.addListener(new ConsoleListener());
 
 ###Tracking
-####Count
+######Count
     Tracker.count("traffic:url1");
 
 If first time calling a counter, which creates the counter, is by incr/decr then the counter is set to accumulative automatically.
@@ -55,11 +55,11 @@ If first time calling a counter, which creates the counter, is by incr/decr then
     Tracker.incr("onlineUser"); // Login
     Tracker.decr("onlineUser"); // Logout or expire
 
-####Gauge
+######Gauge
     long latency = nnn;
     Tracker.gauge("latency:url1", latency);
 
-####Log
+######Log
     Tracker.log("malicious", "IP xxx.xxx.xxx.xxx");
 
 ###Listening
