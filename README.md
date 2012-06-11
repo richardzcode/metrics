@@ -51,6 +51,7 @@ Writes data to console.
     Tracker.count("traffic:url1");
 
 If first time calling a counter, which creates the counter, is by incr/decr then the counter is set to accumulative automatically.
+
     Tracker.incr("onlineUser"); // Login
     Tracker.decr("onlineUser"); // Logout or expire
 
