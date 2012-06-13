@@ -3,11 +3,14 @@ metrics
 
 Capture Java application metrics
 
-Inspired by [Metrics](http://metrics.codahale.com/) written by Coda Hale. But don't want to get too complicated. So write a very light one just enough for basic usages.
+Inspired by [Metrics](http://metrics.codahale.com/) written by Coda Hale. But don't want to get too complicated. I want something lightweight but just enough.
 
 Minimum overhead on data collecting. Use thread to emit event when time unit reached.
 
 Depend on listener implementation, data can be send to database, in-memory, another service, or wherever useful.
+
+##Version
+0.1.0
 
 ##Classes
 
@@ -21,12 +24,12 @@ Base class
 If aspect is set to accumulative then values do not reset on each time unit. Default is non-accumulative.
 
 ######Counter
-Counts number per time unit.
+Count: Counts number per time unit.
 
-Incr/Decr are used to keep counts over time. If the counter is used with incr/decr then number doesn't reset on time unit.
+Incr/Decr: Keep counts over time. Does not reset number if the counter is used with incr/decr.
 
 ######Gauger
-Collect dataset per time unit and calculates count/total/main/mean/90 percentile/95 percentile/99 percentile/max
+Collect dataset per time unit. Calculates count/total/main/mean/90 percentile/95 percentile/99 percentile/max when emitting event.
 
 ######Logger
 Keep special logs per one time unit.
@@ -82,3 +85,6 @@ If first time calling a counter, which creates the counter, is by incr/decr then
     public void onTimeUnit(String data) {
         // Do whatever.
     }
+
+##Run example
+    java -jar metrics-0.1.0.jar
