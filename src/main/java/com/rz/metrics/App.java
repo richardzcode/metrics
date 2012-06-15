@@ -2,6 +2,7 @@ package com.rz.metrics;
 
 import com.rz.metrics.core.Tracker;
 import com.rz.metrics.core.listeners.ConsoleListener;
+import com.rz.metrics.core.listeners.HttpListener;
 
 import java.util.Random;
 
@@ -15,18 +16,24 @@ public class App {
 
         Random random = new Random();
 
-        Tracker.setTimeUnit(5000L);
+        Tracker.setTimeUnit(2000L);
         Tracker.addListener(new ConsoleListener());
-        for (int i = 0; i < 5000; i ++) {
-            Tracker.count("counter1");
-            if (random.nextInt(5) == 1) {
-                Tracker.decr("counter2");
+        Tracker.addListener(new HttpListener("http://localhost:3001/metrics"));
+
+        for (int i = 0; i < 100; i ++) {
+            Tracker.incr("onlineUser");
+        }
+
+        for (int i = 0; i < 50000; i ++) {
+            Tracker.count("traffic:/home");
+            if (random.nextInt(10) < 5) {
+                Tracker.decr("onlineUser");
             } else {
-                Tracker.incr("counter2");
+                Tracker.incr("onlineUser");
             }
-            Tracker.gauge("gauger1", (long) random.nextInt(1000));
+            Tracker.gauge("latency:/home", (long) random.nextInt(1000));
             if (i % 100 == 0) {
-                Tracker.log("logger1", String.format("i == %d", i));
+                Tracker.log("malicious", String.format("%d: IP: xxx.xxx.xxx.xxx", i));
             }
             Thread.sleep((long) random.nextInt(10));
         }

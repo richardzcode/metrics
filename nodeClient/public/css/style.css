@@ -1,0 +1,14 @@
+#container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+#status {
+  border-bottom: 1px solid #888;
+  padding: 3px 3px 3px 0;
+}
+
+canvas {
+  margin: 10px;
+  border: 1px solid #eee;
+}

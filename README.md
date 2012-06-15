@@ -10,7 +10,7 @@ Minimum overhead on data collecting. Use thread to emit event when time unit rea
 Depend on listener implementation, data can be send to database, in-memory, another service, or wherever useful.
 
 ##Version
-0.1.0
+0.1.1
 
 ##Classes
 
@@ -44,7 +44,10 @@ Application should implement IListener and add to Tracker to deal with data.
     }
 
 ######ConsoleListener
-An example of listener. Writes data to console.
+Listen to data and writes data to console.
+
+######HttpListener
+Listen to data and POST to another service.
 
 ##Usage
 
@@ -88,3 +91,9 @@ If first time calling a counter, which creates the counter, is by incr/decr then
 
 ##Run example
     java -jar metrics-0.1.0.jar
+
+######Node.js client
+    cd nodeClient
+    node app.js
+
+Open browser, goto http://localhost:3001/index.html
