@@ -97,4 +97,4 @@ If first time calling a counter, which creates the counter, is by incr/decr then
     node app.js
 
 Open browser, goto http://localhost:3001/index.html
-![nodeClient](raw/master/screenshots/nodeClient.png)
+![nodeClient](https://github.com/richardzcode/metrics/raw/master/screenshots/nodeClient.png)
