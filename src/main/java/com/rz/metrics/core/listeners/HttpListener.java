@@ -29,7 +29,14 @@ public class HttpListener implements IListener {
 
             OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
             writer.write(data);
+            writer.flush();
             writer.close();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            while(reader.readLine() != null) {
+                // Don't care return;
+            }
+            reader.close();
         } catch (Exception e) {
             //
         }
