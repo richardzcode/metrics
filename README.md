@@ -10,12 +10,18 @@ Minimum overhead on data collecting. Use thread to emit event when time unit rea
 Depend on listener implementation, data can be send to database, in-memory, another service, or wherever useful.
 
 ##Version
-0.1.1
+0.1.2
 
 ##Classes
 
 ###Tracker
 Start point. Singleton class. Default time unit is 1 minute.
+    Tracker.count(key);
+    Tracker.incr(key); Tracker.decr();
+    Tracker.gauge(key, value);
+    Tracker.log(key, log);
+
+    Tracker.peek(); // Emit onTimeUnit with current data.
 
 ###Aspect
 

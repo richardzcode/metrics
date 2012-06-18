@@ -56,6 +56,13 @@ public class Tracker {
     }
 
     /**
+     * Clear listeners and aspects.
+     */
+    public static void clear() {
+        getInstance().doClear();
+    }
+
+    /**
      * Counter created by calling count is set to non-accumulative by default.
      */
     public static void count(String key) {
@@ -84,12 +91,23 @@ public class Tracker {
         getInstance().doLog(key, log);
     }
 
+    public static void peek() {
+        getInstance().doPeek();
+    }
+
     public void doAddListener(IListener listener) {
         this.listeners.add(listener);
 
         for (Counter counter : this.counters.values()) {
             counter.addListener(listener);
         }
+    }
+
+    public void doClear() {
+        this.listeners.clear();
+        this.counters.clear();
+        this.gaugers.clear();
+        this.loggers.clear();
     }
 
     public void doCount(String key) {
@@ -124,6 +142,18 @@ public class Tracker {
         Logger logger = this.getAspect(Logger.class, this.loggers, key);
         if (logger != null) {
             logger.log(val);
+        }
+    }
+
+    public void doPeek() {
+        for (Aspect aspect : this.counters.values()) {
+            aspect.peek();
+        }
+        for (Aspect aspect : this.gaugers.values()) {
+            aspect.peek();
+        }
+        for (Aspect aspect : this.loggers.values()) {
+            aspect.peek();
         }
     }
 

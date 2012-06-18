@@ -60,8 +60,12 @@ public abstract class Aspect {
     public void reset() {
         this.start = (new Date()).getTime();
 
-        long end = this.start + this.timeUnit;
-        this.end_bound = end - end % this.timeUnit;
+        if (this.start < this.timeUnit) {
+            this.end_bound = this.timeUnit;
+        } else {
+            long end = this.start + this.timeUnit;
+            this.end_bound = end - end % this.timeUnit;
+        }
 
         if (!this.isAccumulative) {
             resetValues();
@@ -100,6 +104,17 @@ public abstract class Aspect {
         }
     }
 
+    /**
+     * Emit onTimeUnit event with current collected data, collection continues.
+     */
+    public void peek() {
+        synchronized (this.lockOnTimeUnit) {
+            this.stackData();
+            // this.reset(); Do not reset
+            this.onTimeUnit();
+        }
+    }
+
     public void addListener(IListener listener) {
         this.listeners.add(listener);
     }
@@ -116,7 +131,7 @@ public abstract class Aspect {
     // Stack data to be processed later.
     // Event will be emitted from stacked data.
     public void stackData() {
-        this._ts = this.end_bound - this.timeUnit;
+        this._ts = this.start;
     }
 
     /**

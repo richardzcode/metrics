@@ -37,5 +37,15 @@ public class App {
             }
             Thread.sleep((long) random.nextInt(10));
         }
+
+        Tracker.clear();
+        Tracker.addListener(new ConsoleListener());
+        Tracker.setTimeUnit(Long.MAX_VALUE);
+
+        for (int i = 0; i < 6000; i ++) {
+            Tracker.count("cached:profiles");
+            Thread.sleep((long) random.nextInt(10));
+        }
+        Tracker.peek();
     }
 }
